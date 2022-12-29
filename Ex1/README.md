@@ -56,3 +56,7 @@ Here we used JvmUtilities class and pom.xml in order to check code's efficiency 
 #### GroupAdmintest
 
 Here we used JUnit's functionality (assertEquals) to examine GroupAdmin methods' behavior on a ConcreteMember's registered object.
+
+#### UndoableStringBuilderTest
+
+Here we used UndoableStringBuilder tests from Ex0.

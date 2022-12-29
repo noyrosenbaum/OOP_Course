@@ -2,7 +2,6 @@
 
 Submitters: Noy Rosenbaum and Maya **SURNAME NOT COMPLITED**
 
-[[_TOC_]]
 
 ## Description
 

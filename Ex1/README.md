@@ -2,7 +2,6 @@
 
 Submitters: Noy Rosenbaum and Maya Hadad
 
-
 ## Description
 
 In this assignment, we expended UndoableStringBuilder's functionality.
@@ -60,3 +59,16 @@ Here we used JUnit's functionality (assertEquals) to examine GroupAdmin methods'
 #### UndoableStringBuilderTest
 
 Here we used UndoableStringBuilder tests from Ex0.
+
+### Initialization - setup
+
+To clone a repository locally do:
+```
+git clone <repo URL>
+```
+For example:
+```
+git clone https://github.com/noyrosenbaum/OOP_Course.git
+```
+After you finished the setup of the project locally, you can create GroupAdmin and ConcreteMembers' objects are use GroupAdmin's given methods.
+Another option is to use the attached tests as well.

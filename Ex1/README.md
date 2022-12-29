@@ -1,6 +1,6 @@
 # OOP Course - Ex1
 
-Submitters: Noy Rosenbaum and Maya **SURNAME NOT COMPLITED**
+Submitters: Noy Rosenbaum and Maya Hadad
 
 
 ## Description

@@ -32,7 +32,7 @@ Each member in the list holds an UndoableStringBuilder object and a name which t
 the UndoableStringBuilder, GroupAdmin's object will notify to all the registered members about the change (via "notifyMembers" function).
 GroupAdmin's functionality is built on some of UndoableStringBuilder's methods:
 * Append
-* insert
+* Insert
 * Undo
 * Delete
 

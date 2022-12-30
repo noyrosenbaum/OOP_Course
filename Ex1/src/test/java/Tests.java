@@ -56,6 +56,7 @@ public class Tests {
         logger.info(()->JvmUtilities.objectFootprint(member2));
         System.out.println("\n");
         System.out.println("\n");
+        System.out.println("\n");
         System.out.println("Get totalsize of initialized objects");
         //get the size of the whole object
         System.out.println("admin:");

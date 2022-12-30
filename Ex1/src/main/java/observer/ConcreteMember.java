@@ -36,6 +36,36 @@ public class ConcreteMember implements Member, Cloneable {
         return (UndoableStringBuilder) super.clone();
     }
 
+    /** Set UndoableStringBuilder
+     * @param str - UndoableStringBuilder
+     */
+    public void setStr(UndoableStringBuilder str) {
+        this.str = str;
+    }
+
+    /** Set member name
+     * @param name - member
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get UndoableStringBuilder
+     * @return UndoableStringBuilder
+     */
+    public UndoableStringBuilder getStr() {
+        return str;
+    }
+
+    /**
+     * Get member name
+     * @return member name
+     */
+    public String getName() {
+        return name;
+    }
+
     /**
      * toString function
      * @return Data of a member

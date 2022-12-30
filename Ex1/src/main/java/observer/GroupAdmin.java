@@ -75,6 +75,36 @@ public class GroupAdmin implements Sender {
     }
 
     /**
+     * Get member list
+     * @return member list
+     */
+    public List<Member> getMemberList() {
+        return memberList;
+    }
+
+    /** Set member list
+     * @param memberList - arrayList
+     */
+    public void setMemberList(List<Member> memberList) {
+        this.memberList = memberList;
+    }
+
+    /**
+     * Get UndoableStringBuilder
+     * @return UndoableStringBuilder
+     */
+    public UndoableStringBuilder getUsb() {
+        return usb;
+    }
+
+    /** Set UndoableStringBuilder
+     * @param usb - UndoableStringBuilder
+     */
+    public void setUsb(UndoableStringBuilder usb) {
+        this.usb = usb;
+    }
+
+    /**
      * toString function
      * @return Data of a member
      */

@@ -1,41 +1,45 @@
 package Ex2_2;
+//priority queue can be runable or callable
+import java.util.concurrent.*;
 
-public class CustomExecuter implements Runnable, Comparable<CustomExecuter> {
-    private Runnable task;
-    private int priority;
+public class CustomExecuter implements Callable<Integer>{
+    private int numOfCores = Runtime.getRuntime().availableProcessors();
+    private int minPoolSize = numOfCores / 2;
+    private int maxPoolSize = numOfCores - 1;
 
-    public CustomExecuter(Runnable task, int priority) {
-        if (priority >= 0 && priority <= 10)
-            this.priority = priority;
-        else priority = 5;
-        this.task = task;
-    }
+    private ArrayBlockingQueue queue = new ArrayBlockingQueue<Task>(11);
 
-    public Runnable getTask() {
-        return task;
-    }
+    ThreadPoolExecutor threadPool = new ThreadPoolExecutor
+            (minPoolSize, maxPoolSize, 300, TimeUnit.MILLISECONDS, queue);
+    Runnable task1 = () -> System.out.println(Thread.currentThread().getName());
 
-    public int getPriority() {
-        return priority;
-    }
+//    public Callable<Void> async() {
+//        return Callable.runAsync(()->)
+//    }
 
-    public void setTask(Runnable task) {
-        this.task = task;
-    }
+    public Callable<String> asyncThreadName = () -> {
+        return Thread.currentThread().getName();
+    };
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public int submit(Task task) {
+        try {
+            threadPool.submit(() -> System.out.println("test"));
+            return 1;
+        } finally {
+            threadPool.shutdown();
+        }
+
     }
 
     @Override
-    public int compareTo(CustomExecuter otherTask) {
-        return Integer.compare(this.getPriority(), otherTask.getPriority());
+    public Task call() throws Exception {
+        return null;
     }
 
-    @Override
-    public void run() {
-        if (this.task != null)
-            // delegate
-            this.task.run();
-    }
+    threadPool.prestartAllCoreThreads();
+
+    threadPool.execute(task1);
+    threadPool.shutdown();
+
+
 }

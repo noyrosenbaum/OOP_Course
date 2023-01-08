@@ -1,7 +1,8 @@
 package Ex2_2;
+
 import java.util.concurrent.*;
+
 //createtask gets a lambda experession and a task type
-//switch runnable with callable<v>
 public class Task<T> implements Callable<T>, Comparable<Task<T>> {
 
     private T type;
@@ -9,17 +10,18 @@ public class Task<T> implements Callable<T>, Comparable<Task<T>> {
     private int typePriority;
     private TaskType taskType;
 
-    public Task(Callable<T> task, TaskType taskType) {
+    private Task(Callable<T> task, TaskType taskType) {
         if (taskType.getPriorityValue() >= 1 && taskType.getPriorityValue() <= 3)
             this.taskType = taskType;
         this.task = task;
     }
+
     public Callable<T> getTask() {
         return this.task;
     }
 
     public int getPriority() {
-        return this.taskType.getPriorityValue();
+        return taskType.getPriorityValue();
     }
 
     public void setTask(Callable<T> task) {
@@ -31,15 +33,23 @@ public class Task<T> implements Callable<T>, Comparable<Task<T>> {
     }
 
     @Override
-    public int compareTo(Task otherTask) {
-        return TaskType.compareTo(this.taskType.getPriorityValue(), otherTask.taskType.getPriorityValue());
+    public int compareTo(Task<T> otherTask) {
+        return Integer.compareTo(otherTask.getPriority(), this.getPriority());
+    }
+
+    private Task<T> createTask(Callable<T> task, TaskType taskType) {
+
+        return null;
     }
 
     @Override
-    public T call()throws Exception{
-        if (this.task != null)
-            // delegate
-            this.task.call();
+    public T call() {
+        try {
+            if (this.task != null)
+                this.task.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

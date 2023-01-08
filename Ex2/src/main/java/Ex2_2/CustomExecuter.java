@@ -3,14 +3,17 @@ package Ex2_2;
 import java.util.concurrent.*;
 
 public class CustomExecuter implements Callable<Integer>{
+
     private int numOfCores = Runtime.getRuntime().availableProcessors();
     private int minPoolSize = numOfCores / 2;
     private int maxPoolSize = numOfCores - 1;
 
-    private ArrayBlockingQueue queue = new ArrayBlockingQueue<Task>(11);
+    private PriorityBlockingQueue<Runnable> queue = new PriorityBlockingQueue<>(11);
 
     ThreadPoolExecutor threadPool = new ThreadPoolExecutor
             (minPoolSize, maxPoolSize, 300, TimeUnit.MILLISECONDS, queue);
+
+
     Runnable task1 = () -> System.out.println(Thread.currentThread().getName());
 
 //    public Callable<Void> async() {
@@ -21,18 +24,33 @@ public class CustomExecuter implements Callable<Integer>{
         return Thread.currentThread().getName();
     };
 
-    public int submit(Task task) {
+
+    //1
+    public Future submit(Task task) {
         try {
-            threadPool.submit(() -> System.out.println("test"));
-            return 1;
+            return threadPool.submit(task);
         } finally {
             threadPool.shutdown();
         }
-
+    }
+    //2
+    public Future submit(Task task, TaskType taskType) {
+        Task task1 = new Task(task, taskType);
+        return submit(task1);
+    }
+    //3
+    public Future submit(Task task) {
+        Task task2 = new Task(task);
+        return submit(task2);
     }
 
+    public int getCurrentMax(){
+        return null;
+    }
+
+
     @Override
-    public Task call() throws Exception {
+    public Integer call() throws Exception {
         return null;
     }
 

@@ -3,9 +3,10 @@ package Ex2_2;
 import java.util.concurrent.*;
 
 //createtask gets a lambda experession and a task type
+//we get the string next to the number in the enum
 public class Task<T extends Comparable<T>> implements Callable<T>, Comparable<Task<T>> {
 
-//    private T type;
+    private T type;
     private Callable<T> task;
     private int typePriority;
     private TaskType taskType;

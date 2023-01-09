@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 import java.util.concurrent.*;
 
-public class CustomExecuter implements Callable<Integer> {
+public class CustomExecuter {
 
     private int numOfCores = Runtime.getRuntime().availableProcessors();
     private int minPoolSize = numOfCores / 2;
@@ -29,7 +29,7 @@ public class CustomExecuter implements Callable<Integer> {
     };
 
     //1
-    public FutureTask submit(Task task) {
+    public Future<Object> submit(Task task) {
         try {
             return (FutureTask) threadPool.submit(task);
         } finally {
@@ -42,10 +42,10 @@ public class CustomExecuter implements Callable<Integer> {
         return submit(task1);
     }
     //3
-    public Future<T> submit(Task task) {
-        Task task2 = new Task(task);
-        return submit(task2);
-    }
+//    public Future<T> submit(Task task) {
+//        Task task2 = new Task(task);
+//        return submit(task2);
+//    }
 
     public int getCurrentMax(){
         return null;

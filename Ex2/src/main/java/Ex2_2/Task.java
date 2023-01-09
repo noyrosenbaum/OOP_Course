@@ -3,12 +3,15 @@ package Ex2_2;
 import java.util.concurrent.*;
 
 //createtask gets a lambda experession and a task type
-public class Task<T> implements Callable<T>, Comparable<Task<T>> {
+public class Task<T extends Comparable<T>> implements Callable<T>, Comparable<Task<T>> {
 
-    private T type;
+//    private T type;
     private Callable<T> task;
     private int typePriority;
     private TaskType taskType;
+
+    private static Comparator<Task<T>> comparator = new Task<T>()Comparator();
+
 
     private Task(Callable<T> task, TaskType taskType) {
         if (taskType.getPriorityValue() >= 1 && taskType.getPriorityValue() <= 3)

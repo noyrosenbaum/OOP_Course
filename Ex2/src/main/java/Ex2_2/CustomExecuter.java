@@ -1,12 +1,16 @@
 package Ex2_2;
 //priority queue can be runable or callable
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Comparator;
 import java.util.concurrent.*;
 
-public class CustomExecuter implements Callable<Integer>{
+public class CustomExecuter implements Callable<Integer> {
 
     private int numOfCores = Runtime.getRuntime().availableProcessors();
     private int minPoolSize = numOfCores / 2;
     private int maxPoolSize = numOfCores - 1;
+
 
     private PriorityBlockingQueue<Runnable> queue = new PriorityBlockingQueue<>(11);
 
@@ -24,11 +28,10 @@ public class CustomExecuter implements Callable<Integer>{
         return Thread.currentThread().getName();
     };
 
-
     //1
-    public Future submit(Task task) {
+    public FutureTask submit(Task task) {
         try {
-            return threadPool.submit(task);
+            return (FutureTask) threadPool.submit(task);
         } finally {
             threadPool.shutdown();
         }
@@ -39,7 +42,7 @@ public class CustomExecuter implements Callable<Integer>{
         return submit(task1);
     }
     //3
-    public Future submit(Task task) {
+    public Future<T> submit(Task task) {
         Task task2 = new Task(task);
         return submit(task2);
     }
@@ -53,6 +56,7 @@ public class CustomExecuter implements Callable<Integer>{
     public Integer call() throws Exception {
         return null;
     }
+
 
     threadPool.prestartAllCoreThreads();
 

@@ -1,5 +1,5 @@
-import java.io.*;
 package Ex2_1;
+import java.io.*;
 import java.io.*;
 
 public class NewThread extends Thread {

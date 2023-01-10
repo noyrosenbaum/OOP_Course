@@ -1,64 +1,65 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+package Ex2_1;
+import java.io.*;
 
-public class NewThread extends Thread{
+public class NewThread extends Thread {
 
     private String filename;
 
-    /** constructor
+    /**
+     * constructor
+     *
      * @param filename - String - name of file
      */
-    public NewThread(String filename){
-        this.filename =filename;
+    public NewThread(String filename) {
+        this.filename = filename;
     }
 
     /**
      * run method for thread
      */
-    public void run(){
+    public void run() {
         getNumOfLines(this.filename);
     }
 
-    /** getting the number of lines in the file
+    /**
+     * getting the number of lines in the file
+     *
      * @param fileName - string  - file name
      * @return number of lines in file
      */
-    public int getNumOfLines(String fileName){
+    public int getNumOfLines(String fileName) {
 
-        List<String> lines= new ArrayList<>();
-        try {
-            //reading file
-            FileReader fr=new FileReader(fileName);
-            BufferedReader br = new BufferedReader(fr);
-            //adding each line in file to an array list
-            String str;
-            while((str=br.readLine())!=null){
-                lines.add(str);
-            }
-            br.close();
+        int lines = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            while (reader.readLine() != null) lines++;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-
-        return lines.size();
+        return lines;
     }
 
-    /** getting file name
+    /**
+     * getting file name
+     *
      * @return file name
      */
     public String getFilename() {
         return filename;
     }
 
-    /** setting file name
+    /**
+     * setting file name
+     *
      * @param filename - string - name of file
      */
     public void setFilename(String filename) {
         this.filename = filename;
     }
 
-    /** to string method
+    /**
+     * to string method
+     *
      * @return string
      */
     @Override
@@ -68,4 +69,3 @@ public class NewThread extends Thread{
                 '}';
     }
 }
-

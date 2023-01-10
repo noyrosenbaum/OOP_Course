@@ -10,8 +10,6 @@ public class Task<T> implements Callable<T>, Comparable<Task<T>> {
     private Callable<T> task;
     private TaskType taskType;
 
-    //    private static Comparator<Task<T>> comparator = new Task<T>()Comparator();
-
     //constructor
     private Task(Callable<T> task, TaskType taskType) {
         if (taskType.getPriorityValue() >= 1 && taskType.getPriorityValue() <= 3)

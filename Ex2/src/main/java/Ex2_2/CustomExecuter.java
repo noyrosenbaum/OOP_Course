@@ -1,62 +1,55 @@
 package Ex2_2;
-//priority queue can be runable or callable
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
 import java.util.concurrent.*;
 
-public class CustomExecuter {
+public class CustomExecuter extends ThreadPoolExecutor {
 
-    private int numOfCores = Runtime.getRuntime().availableProcessors();
-    private int minPoolSize = numOfCores / 2;
-    private int maxPoolSize = numOfCores - 1;
+    private static final int numOfCores = Runtime.getRuntime().availableProcessors();
+    private static final int minPoolSize = numOfCores / 2;
+    private static final int maxPoolSize = numOfCores - 1;
+    private int maxPriority;
 
-
-    private PriorityBlockingQueue<Runnable> queue = new PriorityBlockingQueue<>(11);
-
-    ThreadPoolExecutor threadPool = new ThreadPoolExecutor
-            (minPoolSize, maxPoolSize, 300, TimeUnit.MILLISECONDS, queue);
-
-
-    Runnable task1 = () -> System.out.println(Thread.currentThread().getName());
-
-//    public Callable<Void> async() {
-//        return Callable.runAsync(()->)
-//    }
-
-    public Callable<String> asyncThreadName = () -> {
-        return Thread.currentThread().getName();
-    };
+    //constructor
+    public CustomExecuter() {
+        super(minPoolSize, maxPoolSize, 300, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<>(11));
+    }
 
     //1
-    public <T> Future<T> submit(Callable<T> task) {
+    public <T> Future<T> submit(Task<T> task) {
         try {
-            return threadPool.submit(task);
+            maxPriority = Math.min(maxPriority, task.getPriority());
+            return super.submit(task);
         } finally {
-            threadPool.shutdown();
+            super.shutdown();
         }
     }
+
     //2
-    public  <T> Future<T> submit(Callable<T> task, TaskType taskType) {
-        Task<T> task1 = Task(task, taskType);
-        return submit(task1);
+    public <T> Future<T> submit(Callable<T> task, TaskType taskType) {
+        Task<T> task1 = Task.createTask(task, taskType);
+        return super.submit(task1);
     }
+
     //3
-//    public <T> Future<T>  submit(Callable<T> task) {
-//        Task task2 = new Task(task);
-//        return submit(task2);
-//    }
-
-    public int getCurrentMax(){
-        return null;
+    public <T> Future<T> submit(Callable<T> task) {
+        Task<T> task2 = Task.createTask(task);
+        return super.submit(task2);
     }
 
+    public int getCurrentMax() {
+        return maxPriority;
+    }
 
+    public void gracefullyTerminate() {
+        super.shutdown();
+        try {
+            if(!super.awaitTermination(300, TimeUnit.MILLISECONDS)) {
+                super.shutdown();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-    threadPool.prestartAllCoreThreads();
-
-    threadPool.execute(task1);
-    threadPool.shutdown();
-
+    }
 
 }

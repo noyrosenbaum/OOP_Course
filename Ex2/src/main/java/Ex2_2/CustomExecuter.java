@@ -29,20 +29,20 @@ public class CustomExecuter {
     };
 
     //1
-    public Future<Object> submit(Task task) {
+    public <T> Future<T> submit(Callable<T> task) {
         try {
-            return (FutureTask) threadPool.submit(task);
+            return threadPool.submit(task);
         } finally {
             threadPool.shutdown();
         }
     }
     //2
-    public Future submit(Task task, TaskType taskType) {
-        Task task1 = new Task(task, taskType);
+    public  <T> Future<T> submit(Callable<T> task, TaskType taskType) {
+        Task<T> task1 = Task(task, taskType);
         return submit(task1);
     }
     //3
-//    public Future<T> submit(Task task) {
+//    public <T> Future<T>  submit(Callable<T> task) {
 //        Task task2 = new Task(task);
 //        return submit(task2);
 //    }
@@ -51,11 +51,6 @@ public class CustomExecuter {
         return null;
     }
 
-
-    @Override
-    public Integer call() throws Exception {
-        return null;
-    }
 
 
     threadPool.prestartAllCoreThreads();

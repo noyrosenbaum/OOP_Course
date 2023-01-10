@@ -49,7 +49,12 @@ public class CustomExecuter extends ThreadPoolExecutor {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    @Override
+    public String toString() {
+        return "CustomExecuter{" +
+                "maxPriority=" + getCurrentMax() +
+                '}';
+    }
 }

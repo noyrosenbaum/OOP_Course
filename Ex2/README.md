@@ -40,6 +40,27 @@ In this class we created our own thread class. We extended the class using the T
 
 In this class, we created our own ThreadPool class. This class extends ThreadPoolExecutor and implements Callable, to execute the tasks (finding number of lines in each file) and using the call method to actually return the number of line in each file.
 
+## Ex2 part 2
+
+### Description
+
+In this part, we overcome a specific limitation of the Java's concurrency designs.
+
+
+#### Classes description
+
+##### Task
+
+##### CustomExecuter
+
+##### TaskType
+
+ Type Enum to descript a Task object's type. Tasks will be classtified as so:
+ * COMPUTATIONAL(1)
+ * IO(2)
+ * OTHER(3)
+ The priorities of the tasks are set that COMPUTATIONAL(1) has the highest priority and OTHER(3) has the lowest.
+
 
 
 

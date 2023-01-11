@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 //createtask gets a lambda experession - callable and a task type
 //we get the string next to the number in the enum
-public class Task<T> implements Callable<T>, Comparable<Task<T>> {
+public class Task<T> extends FutureTask<T> implements Callable<T>, Comparable<Task<T>> {
 
     private T type;
     private Callable<T> task;
@@ -12,6 +12,7 @@ public class Task<T> implements Callable<T>, Comparable<Task<T>> {
 
     //constructor
     private Task(Callable<T> task, TaskType taskType) {
+        super(task);
         if (taskType.getPriorityValue() >= 1 && taskType.getPriorityValue() <= 3)
             this.taskType = taskType;
         this.task = task;

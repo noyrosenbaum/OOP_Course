@@ -2,7 +2,7 @@ package Ex2_2;
 
 import java.util.concurrent.*;
 
-public class CustomExecuter extends ThreadPoolExecutor {
+public class CustomExecutor extends ThreadPoolExecutor {
 
     private static final int numOfCores = Runtime.getRuntime().availableProcessors();
     private static final int minPoolSize = numOfCores / 2;
@@ -10,30 +10,27 @@ public class CustomExecuter extends ThreadPoolExecutor {
     private int maxPriority;
 
     //constructor
-    public CustomExecuter() {
+    public CustomExecutor() {
         super(minPoolSize, maxPoolSize, 300, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<>(11));
     }
 
     //1
     public <T> Future<T> submit(Task<T> task) {
-        try {
-            maxPriority = Math.min(maxPriority, task.getPriority());
-            return super.submit(task);
-        } finally {
-            super.shutdown();
-        }
+        maxPriority = Math.min(maxPriority, task.getPriority());
+        execute(task);
+        return task;
     }
 
     //2
     public <T> Future<T> submit(Callable<T> task, TaskType taskType) {
         Task<T> task1 = Task.createTask(task, taskType);
-        return super.submit(task1);
+        return submit(task1);
     }
 
     //3
     public <T> Future<T> submit(Callable<T> task) {
         Task<T> task2 = Task.createTask(task);
-        return super.submit(task2);
+        return submit(task2);
     }
 
     public int getCurrentMax() {
@@ -43,7 +40,7 @@ public class CustomExecuter extends ThreadPoolExecutor {
     public void gracefullyTerminate() {
         super.shutdown();
         try {
-            if(!super.awaitTermination(300, TimeUnit.MILLISECONDS)) {
+            if (!super.awaitTermination(300, TimeUnit.MILLISECONDS)) {
                 super.shutdown();
             }
         } catch (InterruptedException e) {

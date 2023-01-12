@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Random;
+import java.util.concurrent.*;
 
 public class Ex2_1 {
 
@@ -17,34 +18,31 @@ public class Ex2_1 {
      */
     public static String[] createTextFiles(int n, int seed, int bound) {
 
-        File f;
-        String[] names = new String[n];
+        String[] fileNames = new String[n];
+        //random number of lines using seed and bound
+        Random random = new Random(seed);
         for (int i = 0; i < n; i++) {
-            //name of file
-            names[i] = "file_" + i;
+            int lines = random.nextInt(bound);
             //creating file
-            f = new File("file_" + i + ".txt");
+            FileWriter f = null;
             try {
-                f.createNewFile();
+                f = new FileWriter("file_" + i + ".txt");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            //random number of lines using seed and bound
-            Random random = new Random((long) seed);
-            int lines = random.nextInt(bound);
             //writing into file
             try {
-                OutputStream os = new FileOutputStream(f);
-                PrintWriter pw = new PrintWriter(os);
                 for (int k = 0; k < lines; k++) {
-                    pw.println("Hello World");
+                    f.write("Hello World\n");
                 }
-                pw.close();
-            } catch (FileNotFoundException e) {
+                f.close();
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            //name of file
+            fileNames[i] = "file_" + i + ".txt";
         }
-        return names;
+        return fileNames;
     }
 
     /**
@@ -72,13 +70,18 @@ public class Ex2_1 {
      * @return number of lines in all files
      */
     public static int getNumOfLinesThreads(String[] fileNames) {
-        int numOfLines = 0;
-        for (int i = 0; i < fileNames.length; i++) {
-            NewThread newThread = new NewThread(fileNames[i]);
-            newThread.start();
-            numOfLines = numOfLines + newThread.getNumOfLines(fileNames[i]);
+        int lineCounter = 0;
+        for (String fileName : fileNames) {
+            GetLinesThread tempThread = new GetLinesThread(fileName);
+            tempThread.start();
+            try {
+                tempThread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            lineCounter += tempThread.GetLines();
         }
-        return numOfLines;
+        return lineCounter;
     }
 
     /**
@@ -89,17 +92,45 @@ public class Ex2_1 {
      */
     public static int getNumOfLinesThreadPool(String[] fileNames) {
         int numOfLines = 0;
-        ThreadPool threadPool;
+        ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(fileNames.length);
+        GetLinesCallable[] tasks = new GetLinesCallable[fileNames.length];
         for (int i = 0; i < fileNames.length; i++) {
-            threadPool = new ThreadPool("thread" + i, fileNames[i]);
-            threadPool.start();
+            tasks[i] = new GetLinesCallable(fileNames[i]);
             try {
-                numOfLines = numOfLines + (int) threadPool.call();
-            } catch (Exception e) {
+                numOfLines = numOfLines + threadPool.submit(tasks[i]).get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             }
-
         }
         return numOfLines;
     }
+
+    public static void main(String[] args) {
+
+        String[] filenames;
+        filenames = createTextFiles(15, 5, 99999);
+        Instant before = Instant.now();
+        int lines = 0;
+        lines = getNumOfLines(filenames);
+        Instant after = Instant.now();
+        long delta = 0;
+        delta = Duration.between(before, after).toMillis(); // .toWhatsoever()
+        System.out.println("time without threads is: " + delta + " milliseconds and read " + lines + " lines");
+
+        before = Instant.now();
+        lines = getNumOfLinesThreads(filenames);
+        after = Instant.now();
+        delta = Duration.between(before, after).toMillis(); // .toWhatsoever()
+        System.out.println("time with threads is: " + delta + " milliseconds and read " + lines + " lines");
+
+        before = Instant.now();
+        lines = getNumOfLinesThreadPool(filenames);
+        after = Instant.now();
+        delta = Duration.between(before, after).toMillis(); // .toWhatsoever()
+        System.out.println("time with threadPool is: " + delta + " milliseconds and read " + lines + " lines");
+    }
+
 }
+

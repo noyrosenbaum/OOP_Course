@@ -2,15 +2,16 @@ package Ex2_2;
 
 import java.util.concurrent.*;
 
-//createtask gets a lambda experession - callable and a task type
-//we get the string next to the number in the enum
 public class Task<T> extends FutureTask<T> implements Callable<T>, Comparable<Task<T>> {
-
-    private T type;
     private Callable<T> task;
     private TaskType taskType;
 
-    //constructor
+    /**
+     * Constructor.
+     *
+     * @param task Executed task, typed as a generic Callable.
+     * @param taskType Task's priority.
+     */
     private Task(Callable<T> task, TaskType taskType) {
         super(task);
         if (taskType.getPriorityValue() >= 1 && taskType.getPriorityValue() <= 3)
@@ -18,22 +19,49 @@ public class Task<T> extends FutureTask<T> implements Callable<T>, Comparable<Ta
         this.task = task;
     }
 
-    //factory method with declared task typed
+    /**
+     * Factory method with declared task typed.
+     *
+     * @param task Executed task, typed as a generic Callable.
+     * @param taskType Task's priority.
+     * @param <T> value's type.
+     * @return Task object.
+     */
     public static <T> Task<T> createTask(Callable<T> task, TaskType taskType) {
         return new Task<T>(task, taskType);
     }
 
-    //factory method with default task type - OTHER
+    /**
+     * Factory method with default task type - OTHER.
+     *
+     * @param task Executed task, typed as a generic Callable.
+     * @param <T> Return value's type.
+     * @return Task object of type <T>.
+     */
     public static <T> Task<T> createTask(Callable<T> task) {
-        return new Task<T>(task, TaskType.OTHER);
+        try {
+            return new Task<T>(task, TaskType.OTHER);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    //comparison
+    /**
+     * Make Task objects comparable by their priority number.
+     *
+     * @param otherTask the object to be compared.
+     * @return 0 if equal, -1 or 1 if not equal.
+     */
     @Override
     public int compareTo(Task<T> otherTask) {
         return Integer.compare(otherTask.taskType.getPriorityValue(), this.taskType.getPriorityValue());
     }
 
+    /**
+     * Override Callable's call so the task will be executed.
+     *
+     * @return Asynchronous task object of type <T>.
+     */
     @Override
     public T call() {
         try {
@@ -56,7 +84,6 @@ public class Task<T> extends FutureTask<T> implements Callable<T>, Comparable<Ta
     @Override
     public String toString() {
         return "Task{" +
-                "type=" + type +
                 ", task=" + getTask() +
                 ", typePriority=" + getPriority() +
                 ", taskType=" + taskType +

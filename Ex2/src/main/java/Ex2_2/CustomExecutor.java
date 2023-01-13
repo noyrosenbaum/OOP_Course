@@ -10,7 +10,7 @@ public class CustomExecutor extends ThreadPoolExecutor {
     private int maxPriority;
 
     /**
-     * Constructor which "inherits" ThreadPoolExecutor's constructor
+     * Constructor which "inherits" ThreadPoolExecutor's constructor.
      */
     public CustomExecutor() {
         super(minPoolSize, maxPoolSize, 300, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<>(11));

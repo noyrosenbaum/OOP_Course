@@ -70,18 +70,18 @@ public class Ex2_1 {
      * @return number of lines in all files
      */
     public static int getNumOfLinesThreads(String[] fileNames) {
-        int lineCounter = 0;
-        for (String fileName : fileNames) {
-            GetLinesThread tempThread = new GetLinesThread(fileName);
-            tempThread.start();
+        int numOfLines = 0;
+        for (int i = 0; i < fileNames.length; i++) {
+            GetLinesThread newThread = new GetLinesThread(fileNames[i]);
+            newThread.start();
             try {
-                tempThread.join();
+                newThread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            lineCounter += tempThread.GetLines();
+            numOfLines = numOfLines + newThread.GetLines();
         }
-        return lineCounter;
+        return numOfLines;
     }
 
     /**

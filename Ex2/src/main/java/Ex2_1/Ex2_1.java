@@ -11,7 +11,7 @@ public class Ex2_1 {
     /**
      * creating text file on to disc
      *
-     * @param n     - integer - number of files
+     * @param n - integer - number of files
      * @param seed- integer - number to help find a random number of lines
      * @param bound - integer - number to help find a random number of lines
      * @return names - an array of the names of the files
@@ -98,9 +98,7 @@ public class Ex2_1 {
             tasks[i] = new GetLinesCallable(fileNames[i]);
             try {
                 numOfLines = numOfLines + threadPool.submit(tasks[i]).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -110,7 +108,7 @@ public class Ex2_1 {
     public static void main(String[] args) {
 
         String[] filenames;
-        filenames = createTextFiles(15, 5, 99999);
+        filenames = createTextFiles(1000, 5, 99999);
         Instant before = Instant.now();
         int lines = 0;
         lines = getNumOfLines(filenames);

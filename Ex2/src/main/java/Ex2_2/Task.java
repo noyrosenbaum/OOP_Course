@@ -2,7 +2,7 @@ package Ex2_2;
 
 import java.util.concurrent.*;
 
-public class Task<T> extends FutureTask<T> implements Callable<T>, Comparable<Task<T>> {
+public class Task<T> extends FutureTask<T> implements Comparable<Task<T>> {
     private Callable<T> task;
     private TaskType taskType;
 
@@ -55,22 +55,6 @@ public class Task<T> extends FutureTask<T> implements Callable<T>, Comparable<Ta
     @Override
     public int compareTo(Task<T> otherTask) {
         return Integer.compare(otherTask.taskType.getPriorityValue(), this.taskType.getPriorityValue());
-    }
-
-    /**
-     * Override Callable's call so the task will be executed.
-     *
-     * @return Asynchronous task object of type <T>.
-     */
-    @Override
-    public T call() {
-        try {
-            if (this.task != null)
-                this.task.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return null;
     }
 
     public Callable<T> getTask() {
